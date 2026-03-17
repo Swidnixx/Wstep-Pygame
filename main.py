@@ -25,6 +25,7 @@ spawn_event = pygame.USEREVENT
 pygame.time.set_timer(spawn_event, 3000)
 
 score = 0
+time = 0
 
 # Zmienna określająca, czy należy zamknąć okno
 game_status = True
@@ -46,15 +47,17 @@ while game_status:
     score += collected
 
     #rysowanie
-    screen.fill([23, 54, 200])
+    screen.fill((0, 186, 214))
     screen.blit(player.img, player.rect)
     for p in pickup_factory.pickups:
         screen.blit(p.img, p.rect)
 
-    text_drawer.draw_text_main(screen, f'Score: {score}', (5, SCREEN_HEIGHT - 40))
+    text_drawer.draw_text_main(screen, f'Score: {score}', (5, SCREEN_HEIGHT - 70), (196, 254, 255))
+    text_drawer.draw_text_main(screen, f'Time: {time//1000}', (5, SCREEN_HEIGHT - 40), (196, 254, 255))
 
     pygame.display.update() # Odświeżenie wyświetlanego okna
     clock.tick(60)
+    time += clock.get_time()
 
 
 pygame.quit() # Zamknięcie aplikacji

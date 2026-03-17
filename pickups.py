@@ -24,8 +24,6 @@ class PickupFactory:
                 self.pickups.remove(self.pickups[i])
                 amount += 1
         return amount
-
-
     
 class Pickup:
     def __init__(self, img, position):
