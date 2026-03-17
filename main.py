@@ -7,6 +7,9 @@ SCREEN_WIDTH = 400
 SCREEN_HEIGHT = 300
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+#Timer
+clock = pygame.time.Clock()
+
 # Nadanie nazwy oknu
 pygame.display.set_caption('Pierwsza Gra')
 
@@ -23,6 +26,9 @@ while game_status:
     
     screen.fill([23, 54, 200])
     pygame.display.update() # Odświeżenie wyświetlanego okna
+    clock.tick(60)
+    #clock.tick()
+    print(clock.get_fps())
 
 pygame.quit() # Zamknięcie aplikacji
 quit() # Zamknięcie skryptu
