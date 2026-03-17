@@ -2,30 +2,17 @@ import pygame # Import modułu
 from player import Player
 from pickups import PickupFactory
 from ui import TextDrawer
+from globals import *
 
 pygame.init() # Inicjalizacja modułu
-
-# Utworzenie okna o określonych wymiarach
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-
-#Timer
-clock = pygame.time.Clock()
-
-# Nadanie nazwy oknu
 pygame.display.set_caption('Pierwsza Gra')
+spawn_event = pygame.USEREVENT
+pygame.time.set_timer(spawn_event, 3000)
 
 #obiekty gry
 player = Player(SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
 pickup_factory = PickupFactory(SCREEN_WIDTH, SCREEN_HEIGHT)
-text_drawer = TextDrawer()
-
-spawn_event = pygame.USEREVENT
-pygame.time.set_timer(spawn_event, 3000)
-
-score = 0
-time = 0
+text_drawer = TextDrawer(screen)
 
 # Zmienna określająca, czy należy zamknąć okno
 game_status = True
@@ -52,9 +39,10 @@ while game_status:
     for p in pickup_factory.pickups:
         screen.blit(p.img, p.rect)
 
-    text_drawer.draw_text_main(screen, f'Score: {score}', (5, SCREEN_HEIGHT - 70), (196, 254, 255))
-    text_drawer.draw_text_main(screen, f'Time: {time//1000}', (5, SCREEN_HEIGHT - 40), (196, 254, 255))
-    text_drawer.draw_text_main(screen, f'Bullets: {len(player.bullets)}', (5, SCREEN_HEIGHT - 400), (196, 254, 255))
+    #UI
+    text_drawer.draw_text_main(f'Score: {score}', (5, SCREEN_HEIGHT - 70), (196, 254, 255))
+    text_drawer.draw_text_main(f'Time: {time//1000}', (5, SCREEN_HEIGHT - 40), (196, 254, 255))
+    text_drawer.draw_text_main(f'Bullets: {len(player.bullets)}', (5, 0), (196, 254, 255))
 
     pygame.display.update() # Odświeżenie wyświetlanego okna
     clock.tick(60)

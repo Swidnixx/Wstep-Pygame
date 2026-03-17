@@ -1,5 +1,6 @@
 import pygame
 from pygame import Vector2
+from globals import clock
 
 class Player:
     def __init__(self, x, y, speed = 2):
@@ -13,12 +14,16 @@ class Player:
         self.rotation_speed = 4
 
         self.bullets = []
+        self.shoot_cooldown = 150
+        self.time_since_shot = 0
 
     def update(self, keys):
         self.keys = keys
         self.current_speed = self.speed
         self.steer()
         self.move()
+
+        self.time_since_shot += clock.get_time()
 
     def steer(self):
         if self.keys[pygame.K_d]: 
@@ -50,7 +55,9 @@ class Player:
                 self.bullets.pop(i)
 
     def shoot(self):
-        self.bullets.append( Bullet(self.position, self.rotation) )
+        if self.time_since_shot > self.shoot_cooldown:
+            self.bullets.append( Bullet(self.position, self.rotation) )
+            self.time_since_shot = 0
 
     def draw(self, screen):
         screen.blit(self.img, self.rect)
