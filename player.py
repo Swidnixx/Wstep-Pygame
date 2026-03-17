@@ -6,33 +6,38 @@ class Player:
         self.origin = pygame.image.load("grafiki/player.png")
         self.origin.set_colorkey((0,0,0))
         self.img = self.origin.copy()
-        self.rect = self.img.get_rect(center=(x, y))
+        self.position = (x, y)
+        self.rect = self.img.get_rect(center=self.position)
         self.speed = speed
-        self.angle = 0
+        self.rotation = 0
+        self.rotation_speed = 4
 
     def update(self, keys):
-        move = Vector2(0, 0)
+        self.keys = keys
+        self.current_speed = self.speed
+        self.steer()
+        self.move()
+
+    def steer(self):
+        if self.keys[pygame.K_d]: 
+            self.rotation -= self.rotation_speed
+        if self.keys[pygame.K_a]:
+            self.rotation += self.rotation_speed
+
+        if self.keys[pygame.K_w]:
+            self.current_speed *= 2
+        if self.keys[pygame.K_s]:
+            self.current_speed = 0   
+
+    def move(self):
         forward = Vector2(0, -1)
-        Vector2.rotate_ip(forward, -self.angle)
-        # if keys[pygame.K_w]:
-        #     #move.y = -1
+        Vector2.rotate_ip(forward, -self.rotation)
+        self.position += forward * self.current_speed
 
-        # if keys[pygame.K_s]:
-        #     #move.y = 1       
-        if keys[pygame.K_d]:
-            #move.x = 1 
-            self.angle -= 2
-        if keys[pygame.K_a]:
-            #move.x = -1 
-            self.angle += 2
+        self.img = pygame.transform.rotate(self.origin, self.rotation)
+        self.rect = self.img.get_rect(center=self.position)
 
-        if move.length_squared() > 0:
-            Vector2.normalize_ip(move)
-        self.rect.center += forward * self.speed
 
-        #self.angle += 2
-        center = self.rect.center
-        self.img = pygame.transform.rotate(self.origin, self.angle)
-        self.rect = self.img.get_rect(center = center)
-        #self.rect.center = center
+
+    
         
