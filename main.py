@@ -38,6 +38,7 @@ while game_status:
     keys = pygame.key.get_pressed()
     player.update(keys)
 
+    collected = pickup_factory.check_collisions(player.rect)
 
     #rysowanie
     screen.fill([23, 54, 200])
