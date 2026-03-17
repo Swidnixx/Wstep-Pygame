@@ -14,7 +14,15 @@ pygame.display.set_caption('Pierwsza Gra')
 game_status = True
 # Kod wykonywany póki aplikacja jest uruchomiona
 while game_status:
-    pygame.event.get()
+# Odczytanie zdarzeń zarejestrowanych przez komputer
+    events = pygame.event.get()
+    for e in events:
+        print(e)
+        if e.type == pygame.QUIT:
+            game_status = False
+    
+    screen.fill([23, 54, 200])
+    pygame.display.update() # Odświeżenie wyświetlanego okna
 
 pygame.quit() # Zamknięcie aplikacji
 quit() # Zamknięcie skryptu
