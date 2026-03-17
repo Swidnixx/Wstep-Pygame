@@ -12,6 +12,8 @@ class Player:
         self.rotation = 0
         self.rotation_speed = 4
 
+        self.bullets = []
+
     def update(self, keys):
         self.keys = keys
         self.current_speed = self.speed
@@ -27,7 +29,10 @@ class Player:
         if self.keys[pygame.K_w]:
             self.current_speed *= 2
         if self.keys[pygame.K_s]:
-            self.current_speed = 0   
+            self.current_speed = 0 
+
+        if self.keys[pygame.K_SPACE]:
+            self.shoot()  
 
     def move(self):
         forward = Vector2(0, -1)
@@ -37,7 +42,33 @@ class Player:
         self.img = pygame.transform.rotate(self.origin, self.rotation)
         self.rect = self.img.get_rect(center=self.position)
 
+        for i in range(len(self.bullets)-1,-1,-1):
+            b = self.bullets[i]
+            b.update()
+            in_screen = 0 < b.rect.centerx < 800 and 0 < b.rect.centery < 600
+            if not in_screen:
+                self.bullets.pop(i)
 
+    def shoot(self):
+        self.bullets.append( Bullet(self.position, self.rotation) )
 
-    
-        
+    def draw(self, screen):
+        screen.blit(self.img, self.rect)
+        for b in self.bullets:
+            screen.blit(b.img, b.rect)
+
+class Bullet:
+    def __init__(self, position, angle):
+        self.img = pygame.Surface((20, 20))
+        self.img.fill((0,0,0))
+        strip = pygame.Surface((5,20))
+        strip.fill((255,0,0))
+        self.img.blit(strip, pygame.Rect(8,0,5,20))
+        self.img.set_colorkey((0,0,0))
+        self.img = pygame.transform.rotate(self.img, angle)
+        self.rect = self.img.get_rect(center=position)
+        self.direction = Vector2(0,-1).rotate(-angle)
+        self.speed = 10
+
+    def update(self):
+        self.rect.center += self.direction * self.speed
